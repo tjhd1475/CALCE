@@ -32,15 +32,26 @@ pip install -r requirements.txt
 ## Download Datasets and Preprocess
 We train CALCE on QVHighlights and Charades-STA.
 
-| Dataset      | Original                                        | Preprocessed |
-|--------------|-------------------------------------------------|--------------|
-| QVHighlights | [Download](https://github.com/jiyanggao/TALL)   | [Download](https://drive.google.com/drive/folders/1ih6C2onYEMNZa2x8DbpmkmBriGkO-vRi?usp=sharing)|
-| Charades-STA | [Download](https://github.com/jayleicn/moment_detr) | [Download](https://drive.google.com/drive/folders/1O0Wo-aXzw0yT-Gjsou0J9O96iw-OyuJ8?usp=sharing)
+| Dataset      | Original                                        | Preprocessed | Captions |
+|--------------|-------------------------------------------------|--------------|--------- | 
+| QVHighlights | [Download](https://github.com/jiyanggao/TALL)   | [Download](https://drive.google.com/drive/folders/1ih6C2onYEMNZa2x8DbpmkmBriGkO-vRi?usp=sharing)| [Download](https://drive.google.com/file/d/1PibKAkATuZmtR8kl3bRsp7Fy2TuS6MY0/view?usp=sharing)
+| Charades-STA | [Download](https://github.com/jayleicn/moment_detr) | [Download](https://drive.google.com/drive/folders/1O0Wo-aXzw0yT-Gjsou0J9O96iw-OyuJ8?usp=sharing)| - |
 
 Please download original data and preprocess them via our [scripts](process_data/data_preprocess.ipynb) (Path needs to be customized).
 
-Or download the preprocessed data we provide, and put them under 'lavis/datasets/annotations'.
+Or download the preprocessed data we provide, and put them under [annotaion path](lavis/datasets/annotations)
 
+Then, Download the QVHighlights caption files (or extract it by [Whispher](https://github.com/openai/whisper)), and put them under the same folder of the video folder. 
+
+Path/To/QVHighlights \
+   ├── videos \
+  │       ├── xxxxxx1.mp4 \
+  │       └── xxxxxx2.mp4 \
+  │            ...... \
+   └── srts \
+          ├── xxxxxx1.srt \
+          └── xxxxxx2.srt \
+                  ...... 
 ## Download Checkpoints
 The checkpoints of the two stages training ara provided below.
 
