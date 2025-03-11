@@ -1,0 +1,70 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+model:
+  arch: blip2_calce_stage1
+  model_type: pretrain_flant5xl
+  load_finetuned: False # True
+  use_grad_checkpoint: False
+  freeze_vit: True
+  task: qformer_freeze_lora_item
+  input_time_format: seconds_integers # [seconds_integers | frame_indices]
+  #  format_target_amount: 30
+  interleave_data: True
+  frame_token_aggregation: False # [mean | False]
+  key_frame_selection: cluster  # [cluster | information | interval | none]
+  num_clusters: 12
+  bias1: 1
+
+datasets:
+  charades_sta_stage1: # name of the dataset builder
+    vis_processor:
+        train:
+          name: "blip2_video_train"
+          n_frms: 60
+          image_size: 224
+        eval:
+          name: "blip_video_eval"
+          n_frms: 60
+          image_size: 224
+    text_processor:
+        train:
+          name: "blip_question"
+          max_words: 50
+        eval:
+          name: "blip_question"
+          max_words: 50
+
+run:
+  task: moment_retrieval
+  batch_size_train: 1
+  batch_size_eval: 1
+  num_workers: 8
+
+  max_len: 200
+  min_len: 1
+  num_beams: 5
+
+  seed: 42
+  output_dir: "results/charades"
+  overwrite: False
+
+  amp: True
+#  resume_ckpt_path: "./lavis/results/charades/CALCE_Charades_60_stage1-1/checkpoint_best.pth"
+#  resume_model_only: True
+
+  evaluate: True
+  debug: False
+  test_splits: ["test"]
+
+  device: "cuda"
+  world_size: 4
+  dist_url: "env://"
+  distributed: True
+  find_unused_parameters: True
+
+  wandb: False
+  wandb_project: "CALCE"
+  wandb_name: "CALCE_Charades_60_stage1"

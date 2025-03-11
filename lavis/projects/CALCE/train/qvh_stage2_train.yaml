@@ -1,0 +1,81 @@
+ # Copyright (c) 2022, salesforce.com, inc.
+ # All rights reserved.
+ # SPDX-License-Identifier: BSD-3-Clause
+ # For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
+
+model:
+  arch: blip2_calce_stage2
+  model_type: pretrain_flant5xl
+  load_finetuned: False # True
+  use_grad_checkpoint: False
+  freeze_vit: True
+  task: qformer_freeze_lora_item
+  input_time_format: seconds_integers # [seconds_integers | frame_indices]
+  interleave_data: True
+  frame_token_aggregation: False # [mean | False]
+  key_frame_selection: cluster  # [cluster | information | interval | none]
+  num_clusters: 12
+  bias1: 3
+  bias2: 1
+
+datasets:
+  qvh_stage2: # name of the dataset builder
+    vis_processor:
+        train:
+          name: "blip2_video_train"
+          n_frms: 150
+          image_size: 224
+        eval:
+          name: "blip_video_eval"
+          n_frms: 150
+          image_size: 224
+    text_processor:
+        train:
+          name: "blip_question"
+          max_words: 50
+        eval:
+          name: "blip_question"
+          max_words: 50
+
+run:
+  task: moment_retrieval
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 2.8e-4
+  min_lr: 2.6e-4
+  warmup_lr: 1e-8
+  warmup_steps: 256
+  weight_decay: 0.05
+  max_epoch: 15
+  batch_size_train: 1
+  batch_size_eval: 1
+  num_workers: 8
+  accum_grad_iters: 2
+
+  max_len: 200
+  min_len: 8
+  num_beams: 5
+
+  seed: 42
+  output_dir: "results/qvh/"
+  overwrite: True
+
+  amp: True
+  resume_ckpt_path: "./lavis/results/qvh/CALCE_QVH_75_stage1-1/checkpoint_best.pth"
+  resume_model_only: True
+
+  evaluate: False
+  debug: False
+  train_splits: ["train"]
+  valid_splits: ["val"]
+  test_splits: ["test"]
+
+  device: "cuda"
+  world_size: 4
+  dist_url: "env://"
+  distributed: True
+  find_unused_parameters: True
+
+  wandb: True
+  wandb_project: "CALCE"
+  wandb_name: "CALCE_QVH_150_stage2"
