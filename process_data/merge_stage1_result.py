@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     train_orig_file = './lavis/datasets/annotations/qvh/train.json'
     train_out_file = './lavis/datasets/annotations/qvh/train_stage2.json'
-    train_stage1_file = './results/qvh/CALCE_QVH_75_stage1-1/result/train_epochbest.json'
+    train_stage1_file = './lavis/results/qvh/CALCE_QVH_75_stage1-1/result/train_epochbest.json'
 
     val_orig_file = './lavis/datasets/annotations/qvh/val.json'
     val_out_file = './lavis/datasets/annotations/qvh/val_stage2.json'

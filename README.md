@@ -84,7 +84,7 @@ CALCE \
                      └── qvh \
                              ├── CALCE_QVH_75_stage1-1 \
                             │          └── checkpoint.best \
-                             └── CALCE_QVH_75_stage1-1 \
+                             └── CALCE_QVH_150_stage1-1 \
                                         └── checkpoint.best 
 
 
@@ -137,10 +137,27 @@ get the stage 1 result on the training split.
 sh run_scripts/CALCE/infer/qvh.sh
 sh run_scripts/CALCE/infer/charades.sh
 ```
-### Merge Stage 1 Result
+Then, merge Stage 1 result.
 ```bash
 python process_data/merge_stage1_result.py
 ```
+Or download the merged files we provide above. Should have:
+
+datasets \
+    └──annotations \
+                  ├── charades \
+                 │        ├── train.json \
+                 │        ├── test.json \
+                 │        ├── train_stage2.json \
+                 │        └── test_stage2.json \
+                  └── qvh \
+                           ├── train.json \
+                           ├── val.json \
+                           ├── test_dummy.json \
+                           ├── train_stage2.json \
+                           ├── val_stage2.json \
+                           └── test_dummy_stage2.json
+
 ### Stage 2
 ```bash
 sh run_scripts/CALCE/train/qvh_stage2.sh
