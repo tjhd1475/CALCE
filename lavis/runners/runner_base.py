@@ -442,8 +442,8 @@ class RunnerBase:
             dist.barrier()
 
         # testing phase
-        test_epoch = "best" if (len(self.valid_splits) > 0 or (self.resume_ckpt_path and self.resume_model_only)) else cur_epoch
-        self.evaluate(cur_epoch=test_epoch, skip_reload=self.evaluate_only)
+        test_epoch = "best" if (len(self.valid_splits) > 0 or (len(self.train_splits) == 0 and self.resume_ckpt_path)) else cur_epoch
+        self.evaluate(cur_epoch=test_epoch, skip_reload=True)
 
         total_time = time.time() - start_time
         total_time_str = str(datetime.timedelta(seconds=int(total_time)))
@@ -451,7 +451,7 @@ class RunnerBase:
 
     def evaluate(self, cur_epoch="best", skip_reload=False):
         test_logs = dict()
-
+        logging.info(f"Eval on epoch: {cur_epoch}")
         if len(self.test_splits) > 0:
             for split_name in self.test_splits:
                 test_logs[split_name] = self.eval_epoch(

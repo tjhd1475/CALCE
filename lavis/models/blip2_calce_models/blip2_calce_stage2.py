@@ -254,8 +254,8 @@ class BLIP2_CALCE_STAGE2(Blip2Base):
         query, task_prompt = samples["query_prompt"], samples["task_prompt"]
         item_prompt = samples['item_prompt']
         batch_stage1_pred_windows = [moment_str_to_list(s) for s in samples["stage1_result"]]
-        relevant_windows = ['['+w+']' for w in samples["relevant_windows"]]
-        # relevant_windows = samples["relevant_windows"]
+        # relevant_windows = ['['+w+']' for w in samples["relevant_windows"]]
+        relevant_windows = samples["relevant_windows"]
         num_iters = samples["iters"]
 
         device = video.device
