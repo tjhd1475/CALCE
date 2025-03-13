@@ -948,11 +948,7 @@ class BLIP2_MR(Blip2Base):
             self.load_from_pretrained(url_or_filename=pretrain_path, **kwargs)
             logging.info("load pretrained weights from %s" % pretrain_path)
 
-    def find_annoying_numbers(
-        self,
-        tokenizer=T5TokenizerFast.from_pretrained("google/flan-t5-xl", local_files_only=True),
-        range_end=300,
-    ):
+    def find_annoying_numbers(self, tokenizer, range_end=300):
         """
         Find numbers that are tokenized in more than one token by the T5 tokenizer.
 

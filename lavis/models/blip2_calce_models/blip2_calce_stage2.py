@@ -99,6 +99,7 @@ class BLIP2_CALCE_STAGE2(Blip2Base):
         self.format_target_amount = format_target_amount
         self.interleave_data = interleave_data
         self.frame_token_aggregation = frame_token_aggregation
+        self.local_files_only = False
 
         if self.use_wandb and is_main_process():
             self.wandb_table_data = []
@@ -123,11 +124,11 @@ class BLIP2_CALCE_STAGE2(Blip2Base):
         ##########################################################################
 
         ### Text backbone ########################################################
-        self.t5_tokenizer = T5TokenizerFast.from_pretrained(t5_model,local_files_only=True)
-        t5_config = T5Config.from_pretrained(t5_model,local_files_only=True)
+        self.t5_tokenizer = T5TokenizerFast.from_pretrained(t5_model,local_files_only=self.local_files_only)
+        t5_config = T5Config.from_pretrained(t5_model,local_files_only=self.local_files_only)
         t5_config.dense_act_fn = "gelu"
         self.t5_model = T5ForConditionalGeneration.from_pretrained(
-            t5_model, config=t5_config,local_files_only=True
+            t5_model, config=t5_config,local_files_only=self.local_files_only
         )
 
         # Depending on the tokenizer, some numbers are represented as 2 tokens
@@ -1115,11 +1116,7 @@ class BLIP2_CALCE_STAGE2(Blip2Base):
             self.load_from_pretrained(url_or_filename=pretrain_path, **kwargs)
             logging.info("load pretrained weights from %s" % pretrain_path)
 
-    def find_annoying_numbers(
-        self,
-        tokenizer=T5TokenizerFast.from_pretrained("google/flan-t5-xl",local_files_only=True),
-        range_end=300,
-    ):
+    def find_annoying_numbers(self, tokenizer, range_end=300):
         """
         Find numbers that are tokenized in more than one token by the T5 tokenizer.
 
